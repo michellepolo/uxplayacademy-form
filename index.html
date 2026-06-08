@@ -923,7 +923,7 @@
             <li id="feat5">Aprender con un enfoque práctico y divertido</li>
           </ul>
         </div>
-        <div class="field-label" id="q12sub" style="margin-bottom:12px; font-size:14px; color:#888;">¿Qué tan interesante te parecería? <span id="q12subNote" style="color:#555; font-size:12px;">( 1 = nada / 10 = ¡me inscribo ya! )</span></div>
+        <div id="q12sub" style="margin-bottom:12px; font-size:14px; color:#888;font-family:var(--font-body);"><span id="q12subText">¿Qué tan interesante te parecería?</span> <span id="q12subNote" style="color:#555; font-size:12px;">( 1 = nada / 10 = ¡me inscribo ya! )</span></div>
         <div class="scale-wrap" id="scale12"></div>
         <div class="scale-ends"><span id="scaleMin">nada interesante</span><span id="scaleMax">¡me inscribo ya!</span></div>
       </div>
@@ -992,8 +992,8 @@
 
       <div class="field">
         <div class="code-block">
-          <div class="code-comment">// Tu opinión vale oro.</div>
-          <div class="code-comment">// ¿Podemos hablar 15-20 min?</div>
+          <div class="code-comment" id="codeComment1">// Tu opinión vale oro.</div>
+          <div class="code-comment" id="codeComment2">// ¿Podemos hablar 15-20 min?</div>
         </div>
         <div class="field-label"><span class="q-num">Q17 //</span> ¿Te gustaría participar en una entrevista para ayudarme a construir UX Play Academy?</div>
         <div class="pill-group">
@@ -1410,6 +1410,20 @@
     setHTML('.gift-final a', t.giftBtn, true);
 
     updateProgress(current);
+
+    // Code block S5
+    const cc1 = document.getElementById('codeComment1');
+    const cc2 = document.getElementById('codeComment2');
+    const q12subText = document.getElementById('q12subText');
+    if (lang === 'en') {
+      if (cc1) cc1.textContent = '// Your opinion is gold.';
+      if (cc2) cc2.textContent = '// Can we talk for 15-20 min?';
+      if (q12subText) q12subText.textContent = 'How interesting would it be to you?';
+    } else {
+      if (cc1) cc1.textContent = '// Tu opinión vale oro.';
+      if (cc2) cc2.textContent = '// ¿Podemos hablar 15-20 min?';
+      if (q12subText) q12subText.textContent = '¿Qué tan interesante te parecería?';
+    }
 
     // Feature box Q12
     const feats = lang === 'en'
