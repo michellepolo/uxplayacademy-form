@@ -1295,93 +1295,97 @@
 
   function setLang(lang) {
     currentLang = lang;
+    // Hide lang screen immediately
     document.getElementById('langScreen').classList.add('hidden');
-    applyTranslations(lang);
+    // Try to apply translations, but don't block if error
+    try { applyTranslations(lang); } catch(e) { console.warn('Translation error:', e); }
   }
 
   function applyTranslations(lang) {
     const t = T[lang];
+    if (!t) return;
+
+    // Safe helper
+    const setText = (sel, val, all) => {
+      try {
+        if (all) { document.querySelectorAll(sel).forEach(e => { e.textContent = val; }); }
+        else { const e = document.querySelector(sel); if (e) e.textContent = val; }
+      } catch(e) {}
+    };
+    const setHTML = (sel, val, all) => {
+      try {
+        if (all) { document.querySelectorAll(sel).forEach(e => { e.innerHTML = val; }); }
+        else { const e = document.querySelector(sel); if (e) e.innerHTML = val; }
+      } catch(e) {}
+    };
+    const setPH = (id, val) => {
+      try { const e = document.getElementById(id); if (e) e.placeholder = val; } catch(e) {}
+    };
+
     document.title = t.pageTitle;
     document.documentElement.lang = lang;
 
-    // Hero
-    document.querySelector('.hero h1').innerHTML = t.heroH1;
-    document.querySelector('.hero-sub').textContent = t.heroSub;
-    document.querySelector('.gift-strip p').innerHTML = t.giftText;
+    setHTML('.hero h1', t.heroH1);
+    setText('.hero-sub', t.heroSub);
+    setHTML('.gift-strip p', t.giftText);
 
     // Section titles
     document.querySelectorAll('.sec-title').forEach((el, i) => {
       if (t.sectionLabels[i]) el.textContent = t.sectionLabels[i];
     });
 
-    // Questions labels (q-num spans stay, we update the text node after)
+    // Question labels
     document.querySelectorAll('.field-label').forEach(el => {
-      const qNum = el.querySelector('.q-num');
-      if (!qNum) return;
-      const qText = qNum.textContent.match(/Q(\d+)/);
-      if (!qText) return;
-      const idx = parseInt(qText[1]) - 1;
-      if (t.q[idx]) {
-        // Clear and rebuild
-        el.innerHTML = '';
-        const span = document.createElement('span');
-        span.className = 'q-num';
-        span.textContent = `Q${String(idx+1).padStart(2,'0')} //`;
-        el.appendChild(span);
-        el.appendChild(document.createTextNode(' ' + t.q[idx]));
-      }
+      try {
+        const qNum = el.querySelector('.q-num');
+        if (!qNum) return;
+        const match = qNum.textContent.match(/Q([0-9]+)/);
+        if (!match) return;
+        const idx = parseInt(match[1]) - 1;
+        if (t.q[idx] !== undefined) {
+          el.innerHTML = '';
+          const span = document.createElement('span');
+          span.className = 'q-num';
+          span.textContent = 'Q' + String(idx+1).padStart(2,'0') + ' //';
+          el.appendChild(span);
+          el.appendChild(document.createTextNode(' ' + t.q[idx]));
+        }
+      } catch(e) {}
     });
 
     // Placeholders
     const ph = t.placeholders;
-    const textInputs = [
-      {id:'q1', ph:ph[0]}, {id:'q2', ph:ph[1]}, {id:'q4', ph:ph[2]},
-      {id:'q8', ph:ph[3]}, {id:'q9', ph:ph[4]}, {id:'q14', ph:ph[5]},
-      {id:'q15', ph:ph[6]}, {id:'q16', ph:ph[7]},
-      {id:'q18_whatsapp', ph:ph[8]}, {id:'q18_email', ph:ph[9]}, {id:'q18_instagram', ph:ph[10]}
-    ];
-    textInputs.forEach(({id,ph}) => {
-      const el = document.getElementById(id);
-      if (el) el.placeholder = ph;
-    });
+    setPH('q1', ph[0]); setPH('q2', ph[1]); setPH('q4', ph[2]);
+    setPH('q8', ph[3]); setPH('q9', ph[4]); setPH('q14', ph[5]);
+    setPH('q15', ph[6]); setPH('q16', ph[7]);
+    setPH('q18_whatsapp', ph[8]); setPH('q18_email', ph[9]); setPH('q18_instagram', ph[10]);
 
-    // "Quiero dejar mis pensamientos" buttons
+    // Thought buttons
     document.querySelectorAll('.thought-btn').forEach(btn => {
-      btn.innerHTML = `<span class="t-icon">+</span> ${t.thoughtBtn}`;
+      try { btn.innerHTML = '<span class="t-icon">+</span> ' + t.thoughtBtn; } catch(e) {}
     });
-
-    // Thought labels
-    document.querySelectorAll('.thought-label').forEach(el => {
-      el.textContent = t.thoughtLabel;
-    });
+    setText('.thought-label', t.thoughtLabel, true);
 
     // Nav buttons
     document.querySelectorAll('.btn-primary').forEach(btn => {
-      if (btn.getAttribute('onclick')?.includes('goTo')) {
-        const toSection = btn.getAttribute('onclick').match(/goTo\((\d+)\)/)?.[1];
-        if (toSection) btn.textContent = t.btnNext;
-      }
+      try {
+        const oc = btn.getAttribute('onclick') || '';
+        if (oc.includes('goTo')) btn.textContent = t.btnNext;
+      } catch(e) {}
     });
-    document.querySelectorAll('.btn-ghost').forEach(btn => {
-      btn.textContent = t.btnBack;
-    });
-    const sendBtn = document.querySelector('#s5 .btn-primary');
-    if (sendBtn) sendBtn.textContent = t.btnSend;
+    setText('.btn-ghost', t.btnBack, true);
+    try { const s = document.querySelector('#s5 .btn-primary'); if(s) s.textContent = t.btnSend; } catch(e) {}
 
-    // Contact label hint
-    const contactHint = document.querySelector('#contactField .field-hint');
-    if (contactHint) contactHint.textContent = t.contactLabel;
+    // Contact hint
+    try { const h = document.querySelector('#contactField .field-hint'); if(h) h.textContent = t.contactLabel; } catch(e) {}
 
-    // Footer handles
-    document.querySelectorAll('.sigue').forEach(el => el.innerHTML = t.sigue);
-    document.querySelectorAll('.final-handle').forEach(el => el.innerHTML = t.handle);
+    // Footer
+    setHTML('.sigue', t.sigue, true);
+    setHTML('.final-handle', t.handle, true);
+    setText('.gf-label', t.giftLabel, true);
+    setText('.gf-title', t.giftTitle, true);
+    setHTML('.gift-final a', t.giftBtn, true);
 
-    // Gift card
-    document.querySelectorAll('.gf-label').forEach(el => el.textContent = t.giftLabel);
-    document.querySelectorAll('.gf-title').forEach(el => el.textContent = t.giftTitle);
-    document.querySelectorAll('.gift-final a').forEach(el => el.innerHTML = t.giftBtn);
-
-    // Prog label section prefix
     updateProgress(current);
   }
 
