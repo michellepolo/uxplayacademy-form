@@ -914,18 +914,18 @@
 
       <div class="field">
         <div class="field-label"><span class="q-num">Q12 //</span> Imagina una plataforma donde pudieras…</div>
-        <div class="feature-box">
+        <div class="feature-box" id="featureBox">
           <ul>
-            <li>Seguir una ruta clara paso a paso</li>
-            <li>Completar desafíos prácticos reales</li>
-            <li>Crear proyectos para tu portafolio</li>
-            <li>Acceder a recursos y plantillas descargables</li>
-            <li>Aprender con un enfoque práctico y divertido</li>
+            <li id="feat1">Seguir una ruta clara paso a paso</li>
+            <li id="feat2">Completar desafíos prácticos reales</li>
+            <li id="feat3">Crear proyectos para tu portafolio</li>
+            <li id="feat4">Acceder a recursos y plantillas descargables</li>
+            <li id="feat5">Aprender con un enfoque práctico y divertido</li>
           </ul>
         </div>
-        <div class="field-label" style="margin-bottom:12px; font-size:14px; color:#888;">¿Qué tan interesante te parecería? <span style="color:#555; font-size:12px;">( 1 = nada / 10 = ¡me inscribo ya! )</span></div>
+        <div class="field-label" id="q12sub" style="margin-bottom:12px; font-size:14px; color:#888;">¿Qué tan interesante te parecería? <span id="q12subNote" style="color:#555; font-size:12px;">( 1 = nada / 10 = ¡me inscribo ya! )</span></div>
         <div class="scale-wrap" id="scale12"></div>
-        <div class="scale-ends"><span>nada interesante</span><span>¡me inscribo ya!</span></div>
+        <div class="scale-ends"><span id="scaleMin">nada interesante</span><span id="scaleMax">¡me inscribo ya!</span></div>
       </div>
 
       <div class="field">
@@ -1410,6 +1410,28 @@
     setHTML('.gift-final a', t.giftBtn, true);
 
     updateProgress(current);
+
+    // Feature box Q12
+    const feats = lang === 'en'
+      ? ['Follow a clear step-by-step path','Complete real practical challenges','Build projects for your portfolio','Access downloadable resources and templates','Learn with a practical and fun approach']
+      : ['Seguir una ruta clara paso a paso','Completar desafíos prácticos reales','Crear proyectos para tu portafolio','Acceder a recursos y plantillas descargables','Aprender con un enfoque práctico y divertido'];
+    for (let i = 1; i <= 5; i++) {
+      const el = document.getElementById('feat' + i);
+      if (el) el.textContent = feats[i-1];
+    }
+    // Scale labels
+    const scMin = document.getElementById('scaleMin');
+    const scMax = document.getElementById('scaleMax');
+    const q12sub = document.getElementById('q12subNote');
+    if (lang === 'en') {
+      if (scMin) scMin.textContent = 'not interesting';
+      if (scMax) scMax.textContent = 'sign me up now!';
+      if (q12sub) q12sub.textContent = '( 1 = not interesting / 10 = sign me up! )';
+    } else {
+      if (scMin) scMin.textContent = 'nada interesante';
+      if (scMax) scMax.textContent = '¡me inscribo ya!';
+      if (q12sub) q12sub.textContent = '( 1 = nada / 10 = ¡me inscribo ya! )';
+    }
 
     // Translate checkbox/radio options
     if (t.options) {
