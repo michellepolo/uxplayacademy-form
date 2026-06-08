@@ -1254,7 +1254,19 @@
       progDone: '// COMPLETADO ✓',
       otroPhs: ['¿A qué te dedicas? Cuéntame…','¿Qué otra motivación tienes?','¿Qué otra cosa has hecho para aprender?','¿Qué más te impide avanzar?'],
       thoughtPhs: ['Cuéntame más sobre tu situación actual…','Contame más sobre tu experiencia con UX…','Si quieres compartir más sobre qué te mueve…','Si quieres compartir más sobre tu experiencia aprendiendo…','Si hay algo más que sientes que te bloquea…','¿Quieres contarme más sobre cómo te sientes?','¿Por qué esas opciones son las más importantes?'],
-      sigue: 'Sigue ——→'
+      sigue: 'Sigue ——→',
+      options: {
+        q3: ['Student','Graphic designer','Marketing','Systems / Dev','Social Media','Own business','Other'],
+        q3_es: ['Estudiante','Diseñador gráfico','Marketing','Sistemas / Dev','Social Media','Negocio propio','Otro'],
+        q5_es: ['Nunca he escuchado sobre UX/UI','Sé un poco','Estoy aprendiendo actualmente','Ya tomé cursos','Trabajo en UX/UI'],
+        q6_es: ['Mejorar ingresos','Trabajo remoto','Cambiar de carrera','Me gusta el diseño','Me gusta la tech','Crear proyectos propios','Otro'],
+        q7_es: ['YouTube','TikTok','Cursos gratuitos','Cursos pagados','Bootcamp','Nada todavía','Otro'],
+        q10_es: ['Falta de tiempo','No sé por dónde empezar','Cursos muy caros','Sin mentor','Me siento confundido/a','Falta de práctica','Miedo al fracaso','Otro'],
+        q11_es: ['Estoy emocionado/a pero no sé por dónde empezar','Tengo demasiada información y estoy confundido/a','He intentado varias veces y siempre abandono','Estoy avanzando pero necesito guía','Ya tengo experiencia y quiero mejorar'],
+        q13_es: ['Ruta paso a paso','Ejercicios prácticos','Comunidad','Mentorías','Certificación','Portafolio','Plantillas','Recursos descargables','IA aplicada a UX','Conseguir trabajo'],
+        q17_es: ['¡Sí, con gusto!','No por ahora'],
+        q18canal_es: ['💬 WhatsApp','📸 Instagram','✉️ Email']
+      }
     },
     en: {
       pageTitle: 'UX Play Academy – Validation Survey',
@@ -1287,7 +1299,18 @@
       progDone: '// COMPLETED ✓',
       otroPhs: ['What do you do? Tell me more…','What other motivation do you have?','What else have you done to learn?','What else is holding you back?'],
       thoughtPhs: ['Tell me more about your current situation…','Tell me more about your UX experience…','Share more about what drives you…','Share more about your learning experience…','Is there anything else holding you back?…','Want to tell me more about how you feel?','Why are those the most important to you?'],
-      sigue: 'Continue ——→'
+      sigue: 'Continue ——→',
+      options: {
+        q3: ['Student','Graphic designer','Marketing','Systems / Dev','Social Media','Own business','Other'],
+        q5: ['I\'ve never heard of UX/UI','I know a little','I\'m currently learning','I\'ve taken courses','I work in UX/UI'],
+        q6: ['Improve my income','Remote work','Career change','I love design','I love tech','Build my own projects','Other'],
+        q7: ['YouTube','TikTok','Free courses','Paid courses','Bootcamp','Nothing yet','Other'],
+        q10: ['Lack of time','Don\'t know where to start','Courses are too expensive','No mentor','I feel confused','Lack of practice','Fear of failure','Other'],
+        q11: ['I\'m excited but don\'t know where to start','I have too much info and feel confused','I\'ve tried to learn several times and always quit','I\'m making progress but need guidance','I already have experience and want to improve'],
+        q13: ['Step-by-step path','Practical exercises','Community','Mentorship','Certificate','Portfolio','Templates','Downloadable resources','AI applied to UX','Getting a job'],
+        q17: ['Yes, I\'d love to!','Not right now'],
+        q18canal: ['💬 WhatsApp','📸 Instagram','✉️ Email']
+      }
     }
   };
 
@@ -1387,6 +1410,82 @@
     setHTML('.gift-final a', t.giftBtn, true);
 
     updateProgress(current);
+
+    // Translate checkbox/radio options
+    if (t.options) {
+      const o = t.options;
+
+      // Q3 occupation
+      const q3vals = lang === 'en'
+        ? ['Estudiante','Diseñador gráfico','Marketing','Sistemas / Dev','Social Media','Negocio propio','Otro']
+        : ['Estudiante','Diseñador gráfico','Marketing','Sistemas / Dev','Social Media','Negocio propio','Otro'];
+      const q3new = lang === 'en'
+        ? ['Student','Graphic designer','Marketing','Systems / Dev','Social Media','Own business','Other']
+        : ['Estudiante','Diseñador gráfico','Marketing','Sistemas / Dev','Social Media','Negocio propio','Otro'];
+      translateOpts('q3', q3vals, q3new);
+
+      // Q5 familiarity
+      const q5old = ['Nunca he escuchado sobre UX/UI','Sé un poco','Estoy aprendiendo actualmente','Ya tomé cursos','Trabajo en UX/UI'];
+      const q5new = lang === 'en' ? (o.q5 || q5old) : q5old;
+      translateOpts('q5', q5old, q5new);
+
+      // Q6 motivations
+      const q6old = ['Mejorar ingresos','Trabajo remoto','Cambiar de carrera','Me gusta el diseño','Me gusta la tech','Crear proyectos propios','Otro'];
+      const q6new = lang === 'en' ? (o.q6 || q6old) : q6old;
+      translateOpts('q6', q6old, q6new);
+
+      // Q7 learning methods
+      const q7old = ['YouTube','TikTok','Cursos gratuitos','Cursos pagados','Bootcamp','Nada todavía','Otro'];
+      const q7new = lang === 'en' ? ['YouTube','TikTok','Free courses','Paid courses','Bootcamp','Nothing yet','Other'] : q7old;
+      translateOpts('q7', q7old, q7new);
+
+      // Q10 obstacles
+      const q10old = ['Falta de tiempo','No sé por dónde empezar','Cursos muy caros','Sin mentor','Me siento confundido/a','Falta de práctica','Miedo al fracaso','Otro'];
+      const q10new = lang === 'en' ? (o.q10 || q10old) : q10old;
+      translateOpts('q10', q10old, q10new);
+
+      // Q11 phrases
+      const q11old = ['Estoy emocionado/a pero no sé por dónde empezar','Tengo demasiada información y estoy confundido/a','He intentado varias veces y siempre abandono','Estoy avanzando pero necesito guía','Ya tengo experiencia y quiero mejorar'];
+      const q11new = lang === 'en' ? (o.q11 || q11old) : q11old;
+      translateOpts('q11', q11old, q11new);
+
+      // Q13 priorities
+      const q13old = ['Ruta paso a paso','Ejercicios prácticos','Comunidad','Mentorías','Certificación','Portafolio','Plantillas','Recursos descargables','IA aplicada a UX','Conseguir trabajo'];
+      const q13new = lang === 'en' ? (o.q13 || q13old) : q13old;
+      translateOpts('q13', q13old, q13new);
+
+      // Q17 interview
+      const q17old = ['¡Sí, con gusto!','No por ahora'];
+      const q17new = lang === 'en' ? (o.q17 || q17old) : q17old;
+      translateOpts('q17', q17old, q17new);
+
+      // Q18 channel labels
+      const q18old = ['💬 WhatsApp','📸 Instagram','✉️ Email'];
+      const q18new = lang === 'en' ? (o.q18canal || q18old) : q18old;
+      translateOpts('q18_canal', q18old, q18new);
+    }
+  }
+
+  function translateOpts(name, oldLabels, newLabels) {
+    try {
+      document.querySelectorAll('input[name="' + name + '"]').forEach((inp, i) => {
+        if (newLabels[i] === undefined) return;
+        // Find the opt-label span next to this input
+        const label = inp.nextElementSibling;
+        if (!label || !label.classList.contains('opt-label')) return;
+        // The text is after the .opt-box span
+        const box = label.querySelector('.opt-box, .check-ico, .sq-ico');
+        if (box) {
+          // Remove old text nodes
+          Array.from(label.childNodes).forEach(n => {
+            if (n.nodeType === 3) n.remove(); // text nodes
+          });
+          label.appendChild(document.createTextNode(newLabels[i]));
+        } else {
+          label.textContent = newLabels[i];
+        }
+      });
+    } catch(e) { console.warn('translateOpts error:', name, e); }
   }
 
 </script>
